@@ -1,0 +1,17 @@
+count_mode: code
+default_limit: 300
+limits:
+  Rust: 300
+  TypeScript: 300
+  Svelte: 300
+  CSS: 200
+overrides:
+  - pattern: "**/tests/*.rs"
+    limit: 400
+  - pattern: "**/benches/*.rs"
+    limit: 400
+  - pattern: crates/flibrarian-web/src/handlers.rs
+    limit: 350
+exclude_dirs:
+  - target
+  - node_modules

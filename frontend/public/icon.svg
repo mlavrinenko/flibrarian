@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Stack of books with a wizard hat on top, library theme -->
+  <defs>
+    <linearGradient id="hat9" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1565C0"/>
+      <stop offset="100%" stop-color="#0D47A1"/>
+    </linearGradient>
+  </defs>
+  <!-- Shadow -->
+  <ellipse cx="256" cy="460" rx="170" ry="20" fill="#0D47A1" opacity="0.15"/>
+  <!-- Bottom book (largest, blue) -->
+  <rect x="100" y="390" width="312" height="50" rx="6" fill="#1A237E"/>
+  <rect x="105" y="393" width="5" height="44" rx="2" fill="#0D47A1"/>
+  <line x1="125" y1="415" x2="395" y2="415" stroke="#283593" stroke-width="1" opacity="0.5"/>
+  <!-- Second book (medium, teal) -->
+  <rect x="120" y="335" width="272" height="48" rx="5" fill="#0D47A1"/>
+  <rect x="125" y="338" width="4" height="42" rx="2" fill="#1A237E"/>
+  <line x1="142" y1="360" x2="378" y2="360" stroke="#1565C0" stroke-width="1" opacity="0.5"/>
+  <!-- Third book (smaller, lighter blue) -->
+  <rect x="135" y="282" width="242" height="46" rx="5" fill="#1565C0"/>
+  <rect x="140" y="285" width="4" height="40" rx="2" fill="#0D47A1"/>
+  <line x1="156" y1="305" x2="364" y2="305" stroke="#1976D2" stroke-width="1" opacity="0.5"/>
+  <!-- Fourth book (tilted slightly) -->
+  <g transform="rotate(-3, 256, 258)">
+    <rect x="150" y="232" width="212" height="44" rx="5" fill="#1976D2"/>
+    <rect x="155" y="235" width="4" height="38" rx="2" fill="#1565C0"/>
+  </g>
+  <!-- Open book on top of stack -->
+  <g transform="translate(256, 215)">
+    <path d="M-5 -15 Q-50 -22 -90 -10 L-90 30 Q-50 18 -5 25 Z" fill="#F5F5F5"/>
+    <path d="M5 -15 Q50 -22 90 -10 L90 30 Q50 18 5 25 Z" fill="#ECEFF1"/>
+    <rect x="-5" y="-15" width="10" height="40" fill="#455A64" rx="2"/>
+    <line x1="-75" y1="0" x2="-15" y2="-3" stroke="#B0BEC5" stroke-width="1.5"/>
+    <line x1="-80" y1="10" x2="-15" y2="7" stroke="#B0BEC5" stroke-width="1.5"/>
+    <line x1="15" y1="-3" x2="75" y2="0" stroke="#B0BEC5" stroke-width="1.5"/>
+    <line x1="15" y1="7" x2="80" y2="10" stroke="#B0BEC5" stroke-width="1.5"/>
+  </g>
+  <!-- Wizard hat on very top -->
+  <path d="M256 35 L300 180 L212 180 Z" fill="url(#hat9)"/>
+  <path d="M256 35 L278 110 Q256 105 240 112 Z" fill="#1E88E5" opacity="0.3"/>
+  <ellipse cx="256" cy="183" rx="65" ry="15" fill="#0D47A1"/>
+  <!-- Hat band -->
+  <path d="M212 176 Q256 170 300 176" fill="none" stroke="#FFD54F" stroke-width="5" opacity="0.7"/>
+  <!-- Star -->
+  <polygon points="256,80 260,93 273,93 263,101 266,114 256,107 246,114 249,101 239,93 252,93" fill="#FFD54F" opacity="0.8"/>
+  <!-- Magic sparkles -->
+  <circle cx="170" cy="170" r="2.5" fill="#64B5F6" opacity="0.6"/>
+  <circle cx="340" cy="155" r="2" fill="#90CAF9" opacity="0.5"/>
+  <circle cx="200" cy="130" r="1.5" fill="#BBDEFB" opacity="0.4"/>
+  <circle cx="310" cy="120" r="2" fill="#64B5F6" opacity="0.5"/>
+</svg>

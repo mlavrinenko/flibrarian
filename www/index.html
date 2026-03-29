@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>flibrarian — ваша FB2 библиотека, мгновенно</title>
+<meta name="description" content="Индексация, полнотекстовый поиск и извлечение книг из FB2 архивов. Десктоп, веб, CLI.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<style>
+:root {
+  --bg: #0e0b1a;
+  --bg-surface: #151127;
+  --bg-card: #1a1530;
+  --text: #d8d4e8;
+  --text-dim: #7a7494;
+  --gold: #FFD54F;
+  --gold-light: #FFE082;
+  --gold-dark: #FFC107;
+  --blue: #5aa8ff;
+  --blue-deep: #1565C0;
+  --blue-dark: #0D47A1;
+  --indigo: #1a1a2e;
+  --sparkle: #64B5F6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(21, 101, 192, 0.06), transparent),
+    radial-gradient(ellipse 500px 500px at 80% 90%, rgba(255, 213, 79, 0.03), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+a { color: var(--gold); text-decoration: none; transition: text-shadow 0.2s; }
+a:hover { text-shadow: 0 0 8px var(--gold); }
+
+code {
+  background: var(--bg-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  border: 1px solid rgba(255, 213, 79, 0.12);
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+section { padding: 3rem 0; }
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== LANG TOGGLE ===== */
+
+.lang-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 100;
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255, 213, 79, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+
+.lang-btn {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.7rem;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: var(--gold); background: rgba(255, 213, 79, 0.08); }
+
+/* ===== HERO ===== */
+
+.hero {
+  text-align: center;
+  padding: 5rem 0 2rem;
+}
+
+.hero-logo {
+  width: 112px;
+  height: 112px;
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 0 24px rgba(100, 181, 246, 0.2));
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--blue), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.hero .tagline {
+  font-size: 1rem;
+  color: var(--text-dim);
+  max-width: 560px;
+  margin: 0 auto 1.5rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border: 1px solid rgba(255, 213, 79, 0.25);
+  border-radius: 3px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+/* ===== DIVIDER ===== */
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(100, 181, 246, 0.15), rgba(255, 213, 79, 0.1), transparent);
+  margin: 1rem 0;
+}
+
+/* ===== SCREENSHOTS ===== */
+
+.screenshots {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.screenshot-frame {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(100, 181, 246, 0.1);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(100, 181, 246, 0.04);
+}
+
+.screenshot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.screenshot-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ===== FEATURES ===== */
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(100, 181, 246, 0.08);
+  border-radius: 8px;
+  padding: 1.3rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  border-color: rgba(255, 213, 79, 0.2);
+  box-shadow: 0 0 16px rgba(255, 213, 79, 0.04);
+}
+
+.feature-card h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.feature-card p {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.features-secondary {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ===== INSTALL ===== */
+
+.install-window {
+  background: #08090f;
+  border: 1px solid rgba(100, 181, 246, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(100, 181, 246, 0.08);
+  background: #0d0e18;
+}
+
+.tab {
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.install-body {
+  padding: 1rem 1.4rem;
+  font-size: 0.8rem;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  line-height: 1.8;
+}
+
+.install-body .prompt { color: #66bb6a; }
+.install-body .cmd { color: var(--text); }
+.install-body .comment { color: var(--text-dim); font-size: 0.75rem; }
+.install-body .dim { color: var(--text-dim); }
+
+/* ===== FOOTER ===== */
+
+footer {
+  text-align: center;
+  padding: 2.5rem 0;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  position: relative;
+  z-index: 1;
+}
+
+footer a { color: var(--gold); }
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 700px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-logo { width: 80px; height: 80px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .features-secondary { grid-template-columns: 1fr; }
+  .screenshot-row { grid-template-columns: 1fr; }
+  .section-title { font-size: 1.2rem; }
+  .lang-toggle { top: 0.5rem; right: 0.5rem; }
+}
+
+/* ===== i18n ===== */
+
+[data-lang="en"] .ru { display: none; }
+[data-lang="ru"] .en { display: none; }
+</style>
+</head>
+<body data-lang="ru">
+
+<!-- Language toggle -->
+<div class="lang-toggle" role="group" aria-label="Language">
+  <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
+  <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <img src="logo.svg" alt="flibrarian" class="hero-logo">
+    <h1>flibrarian</h1>
+    <p class="tagline">
+      <span class="ru">Индексирует коллекции fb2 архивов.<br />Быстро ищет и выдаёт нужные книги.</span>
+      <span class="en">Indexes collections of fb2 archives.<br />Quickly finds and delivers the books you need.</span>
+    </p>
+    <span class="hero-badge">
+      <span class="ru">удобный доступ к вашим книгам</span>
+      <span class="en">easy access to your books</span>
+    </span>
+  </div>
+</section>
+
+<div class="container"><div class="divider"></div></div>
+
+<!-- ===== SCREENSHOTS ===== -->
+<section>
+  <div class="container">
+    <h2 class="section-title">
+      <span class="ru">Как это выглядит</span>
+      <span class="en">What it looks like</span>
+    </h2>
+    <div class="screenshots">
+      <div class="screenshot-frame">
+        <img src="screenshot-search.png" loading="lazy" alt="flibrarian — search results">
+      </div>
+      <div class="screenshot-row">
+        <div class="screenshot-frame">
+          <img src="screenshot-book.png" loading="lazy" alt="flibrarian — book details">
+        </div>
+        <div class="screenshot-frame">
+          <img src="screenshot-dark.png" loading="lazy" alt="flibrarian — dark theme">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="divider"></div></div>
+
+<!-- ===== KEY FEATURES ===== -->
+<section>
+  <div class="container">
+    <h2 class="section-title">
+      <span class="ru">Возможности</span>
+      <span class="en">Features</span>
+    </h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>
+          <span class="ru">Быстрая индексация</span>
+          <span class="en">Fast indexing</span>
+        </h3>
+        <p>
+          <span class="ru">Параллельный разбор тысяч книг из ZIP-архивов. Индекс строится один раз, поиск работает мгновенно.</span>
+          <span class="en">Parallel parsing of thousands of books from ZIP archives. Index once, search instantly.</span>
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3>
+          <span class="ru">Поиск с фильтрами</span>
+          <span class="en">Search with filters</span>
+        </h3>
+        <p>
+          <span class="ru">Полнотекстовый поиск через DuckDB FTS. Фильтруйте по автору, жанру, языку, дате, серии.</span>
+          <span class="en">Full-text search powered by DuckDB FTS. Filter by author, genre, language, date, series.</span>
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3>
+          <span class="ru">Три варианта</span>
+          <span class="en">Three flavours</span>
+        </h3>
+        <p>
+          <span class="ru">Десктопное приложение с GUI, веб-сервер для браузера и CLI для терминала. Одно ядро, три интерфейса.</span>
+          <span class="en">Desktop app with GUI, web server for the browser, and CLI for the terminal. One core, three interfaces.</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="features-secondary">
+      <div class="feature-card">
+        <h3>
+          <span class="ru">Массовая загрузка</span>
+          <span class="en">Batch download</span>
+        </h3>
+        <p>
+          <span class="ru">Добавляйте книги в корзину и скачивайте все разом одним архивом.</span>
+          <span class="en">Collect books in a basket and download them all at once as a single archive.</span>
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3>
+          <span class="ru">Сфокусированный дизайн</span>
+          <span class="en">Focused design</span>
+        </h3>
+        <p>
+          <span class="ru">Минималистичный дизайн. Светлая, тёмная или полностью своя тема.</span>
+          <span class="en">Minimalist design. Light, dark, or fully custom theme.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="divider"></div></div>
+
+<!-- ===== INSTALL ===== -->
+<section>
+  <div class="container">
+    <h2 class="section-title">
+      <span class="ru">Установка</span>
+      <span class="en">Install</span>
+    </h2>
+
+    <div class="install-window">
+      <div class="tab-bar" role="tablist">
+        <button class="tab active" data-target="install-desktop" role="tab">
+          <span class="ru">Десктоп</span>
+          <span class="en">Desktop</span>
+        </button>
+        <button class="tab" data-target="install-web" role="tab">
+          <span class="ru">Веб-сервер</span>
+          <span class="en">Web server</span>
+        </button>
+        <button class="tab" data-target="install-cli" role="tab">CLI</button>
+        <button class="tab" data-target="install-nix" role="tab">Nix</button>
+      </div>
+
+      <div id="install-desktop" class="tab-panel active install-body">
+        <span class="comment">
+          <span class="ru"># Скачайте из GitHub Releases</span>
+          <span class="en"># Download from GitHub Releases</span>
+        </span><br>
+        <span class="ru">
+          <span class="comment"># Linux (.deb)</span><br>
+          <span class="prompt">$</span> <span class="cmd">sudo dpkg -i flibrarian-gui_*_amd64.deb</span><br>
+          <span class="comment"># Linux (.rpm)</span><br>
+          <span class="prompt">$</span> <span class="cmd">sudo rpm -i flibrarian-gui-*.x86_64.rpm</span>
+        </span>
+        <span class="en">
+          <span class="comment"># Linux (.deb)</span><br>
+          <span class="prompt">$</span> <span class="cmd">sudo dpkg -i flibrarian-gui_*_amd64.deb</span><br>
+          <span class="comment"># Linux (.rpm)</span><br>
+          <span class="prompt">$</span> <span class="cmd">sudo rpm -i flibrarian-gui-*.x86_64.rpm</span>
+        </span>
+      </div>
+
+      <div id="install-web" class="tab-panel install-body">
+        <span class="comment">
+          <span class="ru"># Скачайте бинарник из GitHub Releases, затем:</span>
+          <span class="en"># Download the binary from GitHub Releases, then:</span>
+        </span><br>
+        <span class="prompt">$</span> <span class="cmd">./flibrarian-web --port 3000</span><br>
+        <span class="comment">
+          <span class="ru"># Откройте http://localhost:3000 в браузере</span>
+          <span class="en"># Open http://localhost:3000 in your browser</span>
+        </span>
+      </div>
+
+      <div id="install-cli" class="tab-panel install-body">
+        <span class="comment">
+          <span class="ru"># Скачайте бинарник из GitHub Releases, затем:</span>
+          <span class="en"># Download the binary from GitHub Releases, then:</span>
+        </span><br>
+        <span class="prompt">$</span> <span class="cmd">flibrarian index ./mylib</span><br>
+        <span class="prompt">$</span> <span class="cmd">flibrarian search ./mylib "Толстой"</span>
+      </div>
+
+      <div id="install-nix" class="tab-panel install-body">
+        <span class="comment">
+          <span class="ru"># Запустить без установки</span>
+          <span class="en"># Run without installing</span>
+        </span><br>
+        <span class="prompt">$</span> <span class="cmd">nix run github:mlavrinenko/flibrarian</span><br>
+        <br>
+        <span class="comment">
+          <span class="ru"># Или добавьте в flake inputs</span>
+          <span class="en"># Or add to your flake inputs</span>
+        </span><br>
+        <span class="dim">flibrarian.url = "github:mlavrinenko/flibrarian";</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="divider"></div></div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <p>
+      <a href="https://github.com/mlavrinenko/flibrarian">GitHub</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://github.com/mlavrinenko/flibrarian/releases">
+        <span class="ru">Релизы</span>
+        <span class="en">Releases</span>
+      </a>
+      &nbsp;&middot;&nbsp;
+      MIT License
+    </p>
+  </div>
+</footer>
+
+<!-- Language switcher & tab switcher -->
+<script>
+(function() {
+  var html = document.documentElement;
+  var body = document.body;
+  var saved = localStorage.getItem("flib-lang");
+  if (saved) {
+    body.setAttribute("data-lang", saved);
+    document.querySelectorAll(".lang-btn").forEach(function(b) {
+      b.classList.toggle("active", b.getAttribute("data-lang") === saved);
+      b.setAttribute("aria-pressed", b.getAttribute("data-lang") === saved);
+    });
+  }
+
+  document.querySelector(".lang-toggle").addEventListener("click", function(e) {
+    var btn = e.target.closest(".lang-btn");
+    if (!btn) return;
+    var lang = btn.getAttribute("data-lang");
+    body.setAttribute("data-lang", lang);
+    localStorage.setItem("flib-lang", lang);
+    document.querySelectorAll(".lang-btn").forEach(function(b) {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-pressed", b === btn);
+    });
+  });
+
+  document.querySelectorAll(".tab-bar").forEach(function(bar) {
+    bar.querySelectorAll(".tab").forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        bar.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        var parent = bar.closest(".install-window");
+        parent.querySelectorAll(".tab-panel").forEach(function(p) { p.classList.remove("active"); });
+        var target = parent.querySelector("#" + tab.getAttribute("data-target"));
+        if (target) target.classList.add("active");
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

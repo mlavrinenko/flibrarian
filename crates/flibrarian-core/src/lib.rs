@@ -1,0 +1,10 @@
+pub mod annotations;
+pub mod common;
+pub mod covers;
+pub mod encoding;
+pub mod extracting;
+#[cfg(feature = "faking")]
+pub mod faking;
+pub mod indexing;
+pub mod searching;
+pub mod settings;

@@ -1,0 +1,30 @@
+[package]
+name = "flibrarian-cli"
+description = "CLI tool to interact with your fb2 zipped library"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[[bin]]
+name = "flibrarian"
+path = "src/main.rs"
+
+[dependencies]
+flibrarian-core = { path = "../flibrarian-core", features = ["faking"] }
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+cli-table = "0.5.0"
+env_logger = "0.11.8"
+indicatif = "0.17"
+log = "0.4.27"
+serde = { version = "1.0", features = ["derive"] }
+
+[features]
+bundled-duckdb = ["flibrarian-core/bundled-duckdb"]
+
+[lints]
+workspace = true

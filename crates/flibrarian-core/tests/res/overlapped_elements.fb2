@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <description>
+        <title-info>
+            <genre>science</genre>
+            <book-title>Тайны звёздного неба</book-title>
+            <author>
+                <first-name>Алексей</first-name>
+                <last-name>Волков</last-name>
+            </author>
+            <lang>ru</lang>
+            <src-lang>ru</src-lang>
+            <book-title>Путеводитель наблюдателя</book-title>
+        </title-info>
+        <document-info>
+            <date>15.03.2020</date>
+            <version>1.0</version>
+        </document-info>
+    </description>
+
+</FictionBook>

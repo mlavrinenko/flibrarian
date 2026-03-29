@@ -1,0 +1,8 @@
+/target
+/coverage
+result
+.direnv
+var
+node_modules
+frontend/dist
+*.profraw

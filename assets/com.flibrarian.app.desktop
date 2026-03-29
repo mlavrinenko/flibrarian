@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=flibrarian
+Comment=FB2 library manager
+Exec=flibrarian-gui
+Icon=com.flibrarian.app
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupWMClass=com.flibrarian.app

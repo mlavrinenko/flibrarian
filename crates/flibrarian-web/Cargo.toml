@@ -1,0 +1,37 @@
+[package]
+name = "flibrarian-web"
+description = "Axum web server for flibrarian"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+default-run = "flibrarian-web"
+
+[[bin]]
+name = "flibrarian-web"
+path = "src/main.rs"
+
+[dependencies]
+flibrarian-core = { path = "../flibrarian-core" }
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+tokio-stream = "0.1"
+tower-http = { version = "0.6", features = ["fs", "cors"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+log = "0.4"
+env_logger = "0.11"
+futures-util = "0.3"
+mime_guess = "2"
+rust-embed = "8"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+[features]
+bundled-duckdb = ["flibrarian-core/bundled-duckdb"]
+
+[lints]
+workspace = true

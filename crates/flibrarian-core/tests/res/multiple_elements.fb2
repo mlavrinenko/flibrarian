@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<description>
+    <title-info>
+        <genre>science</genre>
+        <author>
+            <first-name>Дмитрий</first-name>
+            <last-name>Орлов</last-name>
+        </author>
+        <book-title>Тайны звёздного неба</book-title>
+        <book-title>Путеводитель наблюдателя</book-title>
+        <lang>ru</lang>
+        <src-lang>ru</src-lang>
+    </title-info>
+    <title-info>
+        <author>
+            <first-name>Алексей</first-name>
+            <last-name>Волков</last-name>
+        </author>
+        <book-title>WRONG TITLE</book-title>
+    </title-info>
+    <document-info>
+        <date>15.03.2020</date>
+        <version>1.0</version>
+    </document-info>
+    <publish-info>
+        <year>2020</year>
+    </publish-info>
+</description>
+<body></body>
+</FictionBook>
