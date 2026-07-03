@@ -151,7 +151,6 @@
               nodejs_22
               mold
               clang
-              sccache
             ];
             buildInputs = [
               pkgs.openssl
@@ -176,7 +175,8 @@
               export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH"
               export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="clang"
               export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS="-C link-arg=-fuse-ld=mold"
-              export RUSTC_WRAPPER="$(command -v sccache)"
+              # RUSTC_WRAPPER comes from the host session (global kache); inherited
+              # here, and it never reaches the `nix build` sandbox.
               export DUCKDB_LIB_DIR="${duckdb.lib}/lib"
               export DUCKDB_INCLUDE_DIR="${duckdb.dev}/include"
             '';
