@@ -3,14 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    ejectest = {
-      url = "github:mlavrinenko/ejectest";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    linecop = {
-      url = "github:mlavrinenko/linecop";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    qahq.url = "github:mlavrinenko/qahq";
   };
 
   outputs =
@@ -168,8 +161,8 @@
               pkgs.just
               pkgs.parallel
               pkgs.valgrind
-              self.inputs.ejectest.packages.${system}.default
-              self.inputs.linecop.packages.${system}.default
+              self.inputs.qahq.packages.${system}.ejectest
+              self.inputs.qahq.packages.${system}.linecop
             ];
             shellHook = ''
               export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH"
