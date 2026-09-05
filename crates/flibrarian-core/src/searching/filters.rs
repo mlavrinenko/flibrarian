@@ -7,19 +7,14 @@ pub fn parse_filter_value(raw: &str) -> (bool, &str) {
         .map_or((false, trimmed), |exact| (true, exact))
 }
 
+/// Two-character operators first, so `>=` never parses as `>`.
+const SIZE_OPS: [&str; 4] = [">=", "<=", ">", "<"];
+
 pub fn parse_file_size_filter(raw: &str) -> Option<(&str, u64)> {
     let trimmed = raw.trim();
-    let (op, rest) = if let Some(r) = trimmed.strip_prefix(">=") {
-        (">=", r)
-    } else if let Some(r) = trimmed.strip_prefix("<=") {
-        ("<=", r)
-    } else if let Some(r) = trimmed.strip_prefix('>') {
-        (">", r)
-    } else if let Some(r) = trimmed.strip_prefix('<') {
-        ("<", r)
-    } else {
-        return None;
-    };
+    let (op, rest) = SIZE_OPS
+        .iter()
+        .find_map(|op| trimmed.strip_prefix(op).map(|rest| (*op, rest)))?;
 
     let rest = rest.trim();
     let num_end = rest
