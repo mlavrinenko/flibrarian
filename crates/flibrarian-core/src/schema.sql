@@ -1,5 +1,5 @@
-SET autoinstall_known_extensions=1;
-SET autoload_known_extensions=1;
+-- Extension autoload/autoinstall is set by common::db_config_with_extensions.
+-- Re-SETting it here would override the packaged-extension policy per connection.
 PRAGMA enable_object_cache;
 
 CREATE TYPE IF NOT EXISTS archive_status AS ENUM ('indexing', 'indexed');
