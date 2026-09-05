@@ -34,6 +34,21 @@ nix run github:mlavrinenko/flibrarian
 nix run github:mlavrinenko/flibrarian#web
 ```
 
+#### Бинарный кеш
+
+CI пушит сборки в `https://mlavrinenko.cachix.org`. Флейк объявляет его в
+`nixConfig`, но Nix игнорирует эту настройку для недоверенных флейков — на
+NixOS пропишите кеш в конфигурации:
+
+```nix
+nix.settings = {
+  substituters = [ "https://mlavrinenko.cachix.org" ];
+  trusted-public-keys = [
+    "mlavrinenko.cachix.org-1:vNcY3Nf5Y1J0D30uNAwrw44CBHbHDd1tGiA18ANz4XY="
+  ];
+};
+```
+
 ## Быстрый старт
 
 ### GUI / Web
