@@ -69,6 +69,7 @@ struct ErrorBody {
 }
 
 fn error_response(status: StatusCode, message: String) -> impl IntoResponse {
+    log::error!("{status} {message}");
     (status, Json(ErrorBody { error: message }))
 }
 
@@ -142,8 +143,13 @@ pub async fn search(
 
 pub async fn index(
     Json(request): Json<IndexRequest>,
-) -> Sse<impl futures_util::Stream<Item = Result<Event, Infallible>>> {
+) -> Result<Sse<impl futures_util::Stream<Item = Result<Event, Infallible>>>, Response> {
     let library_path = resolve_path(&request.path);
+
+    if let Err(e) = flibrarian_core::preflight::ensure_writable(&library_path) {
+        return Err(error_response(StatusCode::FORBIDDEN, format!("{e:#}")).into_response());
+    }
+
     let indexing_mode = IndexingMode::from_str_with_archives(&request.mode, request.archives);
 
     let (tx, rx) = mpsc::channel::<Result<Event, Infallible>>(32);
@@ -192,7 +198,7 @@ pub async fn index(
         }
     });
 
-    Sse::new(ReceiverStream::new(rx))
+    Ok(Sse::new(ReceiverStream::new(rx)))
 }
 
 pub async fn extract(

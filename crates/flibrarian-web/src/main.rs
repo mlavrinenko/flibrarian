@@ -90,9 +90,35 @@ fn app_with_embedded_frontend() -> Router {
         .layer(CorsLayer::permissive())
 }
 
+fn log_library_preflight() {
+    let Ok(settings) = flibrarian_core::settings::load_settings() else {
+        log::warn!("Could not read settings; skipping library preflight");
+        return;
+    };
+    let Some(library) = settings.library_path else {
+        log::info!("No library configured yet; skipping library preflight");
+        return;
+    };
+
+    let path = flibrarian_core::common::resolve_path(&library);
+    let access = flibrarian_core::preflight::check_write_access(&path);
+    if access.is_writable() {
+        log::info!("Library {} is writable", path.display());
+    } else {
+        log::error!(
+            "Library {} cannot be indexed: {} ({}); search still works",
+            path.display(),
+            access.explain(),
+            access.as_str()
+        );
+    }
+}
+
 #[tokio::main]
 async fn main() {
     env_logger::init();
+
+    log_library_preflight();
 
     let args = Args::parse();
 

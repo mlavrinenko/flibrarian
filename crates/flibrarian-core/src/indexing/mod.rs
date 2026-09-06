@@ -77,6 +77,8 @@ where
     W: Fn(&str) + Send + Sync,
     I: Fn(&str) + Send + Sync,
 {
+    crate::preflight::ensure_writable(library_path)?;
+
     let db_path = get_db_path(library_path);
     drop(create_database_connection(&db_path)?);
 

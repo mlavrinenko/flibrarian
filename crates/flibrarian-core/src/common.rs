@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use duckdb::{AccessMode, Config, Connection};
-use log::info;
+use log::debug;
 use std::path::{Path, PathBuf};
 
 #[must_use]
@@ -45,13 +45,18 @@ pub fn resolve_path(path: &str) -> PathBuf {
 }
 
 pub fn create_database_connection(db_path: &Path) -> Result<Connection> {
-    info!("Connecting to database at {}", db_path.display());
+    debug!("Connecting to database at {}", db_path.display());
     let conn = Connection::open_with_flags(db_path, db_config(AccessMode::ReadWrite)?)
-        .context("Failed to open or create database file")?;
+        .with_context(|| {
+            format!(
+                "Failed to open or create database file {}",
+                db_path.display()
+            )
+        })?;
 
     conn.execute_batch(include_str!("schema.sql"))
         .context("Failed to initialize database schema")?;
 
-    info!("Database schema initialized");
+    debug!("Database schema initialized");
     Ok(conn)
 }

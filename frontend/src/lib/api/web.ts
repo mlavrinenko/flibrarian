@@ -4,6 +4,7 @@ import type {
   LanguageCount,
   Settings,
 } from "../types";
+import { apiError } from "./error";
 import type {
   Api,
   ArchiveInfo,
@@ -51,7 +52,7 @@ export class WebAdapter implements Api {
       body: JSON.stringify({ path, mode, archives }),
       signal,
     });
-    if (!response.ok) throw new Error("Indexing failed");
+    if (!response.ok) throw await apiError(response, "Indexing failed");
 
     const reader = response.body?.getReader();
     if (!reader) return;

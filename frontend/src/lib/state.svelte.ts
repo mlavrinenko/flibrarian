@@ -68,6 +68,7 @@ class AppState {
     columnFilters: emptyFilters(),
   });
   private restoringFromHistory = false;
+  private resumeBlocked = false;
 
   get canUndo(): boolean {
     return this.history.canUndo;
@@ -116,7 +117,7 @@ class AppState {
   }
 
   private async checkAndResumeIndexing(libraryPath: string) {
-    if (this.indexing) return;
+    if (this.indexing || this.resumeBlocked) return;
     try {
       const state = await api.getIndexState(libraryPath);
       if (state.archives_pending > 0 || state.archives_new > 0) {
@@ -125,10 +126,15 @@ class AppState {
           source: "indexing",
           message: `Resuming indexing: ${state.archives_pending} interrupted, ${state.archives_new} new archives`,
         });
-        await this.index("new");
+        this.resumeBlocked = !(await this.index("new"));
       }
-    } catch {
-      // DB doesn't exist yet or other error — ignore
+    } catch (e) {
+      this.resumeBlocked = true;
+      logs.add({
+        level: "warn",
+        source: "indexing",
+        message: errorMessage(e),
+      });
     }
   }
 
@@ -276,13 +282,14 @@ class AppState {
     }
   }
 
-  async index(mode: string, archives?: string[]) {
-    if (!this.libraryPath) return;
+  async index(mode: string, archives?: string[]): Promise<boolean> {
+    if (!this.libraryPath) return false;
 
     this.indexAbort = new AbortController();
     this.indexing = true;
     this.indexingProgress = { phase: "Parsing", current: 0, total: 0 };
     this.error = null;
+    this.resumeBlocked = false;
 
     try {
       await api.indexLibrary(
@@ -301,8 +308,10 @@ class AppState {
         archives,
       );
     } catch (e) {
-      if (this.indexAbort.signal.aborted) return;
+      if (this.indexAbort.signal.aborted) return false;
       this.error = errorMessage(e);
+      logs.add({ level: "error", source: "indexing", message: this.error });
+      return false;
     } finally {
       this.indexAbort = null;
       this.indexing = false;
@@ -312,6 +321,8 @@ class AppState {
         void this.loadIndexState(this.libraryPath);
       }
     }
+
+    return true;
   }
 
   cancelIndex() {

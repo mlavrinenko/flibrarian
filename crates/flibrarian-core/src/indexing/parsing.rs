@@ -51,7 +51,11 @@ pub fn parse_zip_archive(
     };
 
     if books.is_empty() {
-        log::info!("No FB2 files or valid data found in {zip_filename}. Skipping.");
+        if check_cancelled(cancelled).is_err() {
+            log::info!("Cancelled while parsing {zip_filename}");
+        } else {
+            log::info!("No FB2 files or valid data found in {zip_filename}. Skipping.");
+        }
         return None;
     }
 
