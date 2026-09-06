@@ -145,7 +145,7 @@
             pname = "flibrarian";
             version = "0.1.1";
             src = ./.;
-            cargoHash = "sha256-ZMLvpzVHjUBZSj7xU34SFo3CsIkcCXmLCR0hUgdGGQM=";
+            cargoHash = "sha256-ZvCAMh8smcTNHEEMZxp0TIsNgP2WLdIIJCaieDBmF1U=";
             # CLI only. A workspace-wide build drags in flibrarian-gui, whose
             # gio-sys/webkitgtk stack is not packaged here; the GUI ships through
             # GitHub Releases instead.
@@ -160,7 +160,7 @@
             pname = "flibrarian-web";
             version = "0.1.1";
             src = ./.;
-            cargoHash = "sha256-ZMLvpzVHjUBZSj7xU34SFo3CsIkcCXmLCR0hUgdGGQM=";
+            cargoHash = "sha256-ZvCAMh8smcTNHEEMZxp0TIsNgP2WLdIIJCaieDBmF1U=";
             cargoBuildFlags = [ "-p" "flibrarian-web" ];
             cargoTestFlags = [ "-p" "flibrarian-web" ];
             preBuild = ''
