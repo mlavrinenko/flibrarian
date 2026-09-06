@@ -1674,7 +1674,7 @@ dependencies = [
 
 [[package]]
 name = "flibrarian-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "clap",
@@ -1688,7 +1688,7 @@ dependencies = [
 
 [[package]]
 name = "flibrarian-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -1718,7 +1718,7 @@ dependencies = [
 
 [[package]]
 name = "flibrarian-gui"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "base64 0.22.1",
  "env_logger",
@@ -1733,7 +1733,7 @@ dependencies = [
 
 [[package]]
 name = "flibrarian-web"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "axum",
  "clap",

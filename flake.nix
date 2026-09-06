@@ -122,7 +122,7 @@
 
           frontend = pkgs.stdenvNoCC.mkDerivation {
             pname = "flibrarian-frontend";
-            version = "0.1.0";
+            version = "0.1.1";
             src = ./frontend;
             nativeBuildInputs = [ pkgs.bun pkgs.nodejs_22 ];
             configurePhase = ''
@@ -143,7 +143,7 @@
           duckdbEnv
           // {
             pname = "flibrarian";
-            version = "0.1.0";
+            version = "0.1.1";
             src = ./.;
             cargoHash = "sha256-ZMLvpzVHjUBZSj7xU34SFo3CsIkcCXmLCR0hUgdGGQM=";
             # CLI only. A workspace-wide build drags in flibrarian-gui, whose
@@ -158,7 +158,7 @@
           duckdbEnv
           // {
             pname = "flibrarian-web";
-            version = "0.1.0";
+            version = "0.1.1";
             src = ./.;
             cargoHash = "sha256-ZMLvpzVHjUBZSj7xU34SFo3CsIkcCXmLCR0hUgdGGQM=";
             cargoBuildFlags = [ "-p" "flibrarian-web" ];
