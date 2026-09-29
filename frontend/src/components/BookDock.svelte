@@ -2,6 +2,7 @@
   import { errorMessage } from "../lib/types";
   import { appState } from "../lib/state.svelte";
   import { basket } from "../lib/basket";
+  import { coverViewer } from "../lib/cover";
   import { api } from "../lib/api";
   import { downloadBooks } from "../lib/downloads";
   import { i18n } from "../lib/i18n";
@@ -88,6 +89,12 @@
     }
   }
 
+  function openCover() {
+    if (coverUrl && book) {
+      coverViewer.show(coverUrl, book.title);
+    }
+  }
+
   function handleBasketToggle() {
     if (!book) return;
     if (inBasket) {
@@ -156,9 +163,14 @@
       {#if coverLoading}
         <div class="cover-placeholder"></div>
       {:else if coverUrl}
-        <div class="cover">
+        <button
+          class="cover"
+          onclick={openCover}
+          title={i18n.t.bookDetail.enlargeCover}
+          aria-label={i18n.t.bookDetail.enlargeCover}
+        >
           <img src={coverUrl} alt={book.title} />
-        </div>
+        </button>
       {/if}
 
       <div class="details">
@@ -244,6 +256,15 @@
 
   .cover {
     flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    line-height: 0;
+  }
+
+  .cover:hover img {
+    border-color: var(--color-primary);
   }
 
   .cover img {

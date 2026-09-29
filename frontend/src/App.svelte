@@ -5,6 +5,7 @@
   import BookDock from "./components/BookDock.svelte";
   import SettingsPanel from "./components/SettingsPanel.svelte";
   import BasketPopup from "./components/BasketPopup.svelte";
+  import CoverPopup from "./components/CoverPopup.svelte";
   import BasketIcon from "./components/icons/BasketIcon.svelte";
   import SettingsIcon from "./components/icons/SettingsIcon.svelte";
   import LogsIcon from "./components/icons/LogsIcon.svelte";
@@ -14,6 +15,7 @@
   import ToastContainer from "./components/ToastContainer.svelte";
   import { appState } from "./lib/state.svelte";
   import { basket } from "./lib/basket";
+  import { coverViewer } from "./lib/cover";
   import { logs } from "./lib/logs";
   import { i18n } from "./lib/i18n";
   import { settings } from "./lib/settings";
@@ -64,7 +66,9 @@
       document.getElementById("search-query")?.focus();
     }
     if (e.key === "Escape") {
-      if (appState.detailBook) {
+      if (coverViewer.open) {
+        coverViewer.close();
+      } else if (appState.detailBook) {
         appState.closeBookDetail();
       } else {
         if (document.activeElement instanceof HTMLElement) {
@@ -166,6 +170,7 @@
 
   <SettingsPanel />
   <BasketPopup />
+  <CoverPopup />
   <LogsPanel />
   <ToastContainer />
 </div>

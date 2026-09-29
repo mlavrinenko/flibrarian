@@ -60,6 +60,7 @@ export interface Translation {
     id: string;
     score: string;
     annotation: string;
+    enlargeCover: string;
   };
   settings: {
     title: string;

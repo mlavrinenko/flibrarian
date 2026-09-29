@@ -63,6 +63,7 @@ const en: Translation = {
     id: "ID",
     score: "Score",
     annotation: "Annotation",
+    enlargeCover: "Enlarge cover",
   },
   settings: {
     title: "Settings",

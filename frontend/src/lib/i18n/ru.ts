@@ -72,6 +72,7 @@ const ru: Translation = {
     id: "ID",
     score: "Ранг",
     annotation: "Аннотация",
+    enlargeCover: "Увеличить обложку",
   },
   settings: {
     title: "Настройки",
