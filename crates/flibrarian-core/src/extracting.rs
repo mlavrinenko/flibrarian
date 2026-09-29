@@ -1,4 +1,5 @@
 use crate::common::{db_config, get_db_path};
+use crate::naming::{book_file_name, normalized_author};
 use anyhow::{Context, Result};
 use duckdb::{AccessMode, Connection, params_from_iter};
 use log::{error, info, warn};
@@ -105,14 +106,8 @@ fn extract_single_book(
     let (file_name, title, author) = book_map.get(&book_id).map_or_else(
         || (format!("{book_id}.fb2"), String::new(), String::new()),
         |book_data| {
-            let author_str = book_data
-                .author
-                .as_deref()
-                .unwrap_or_default()
-                .trim()
-                .replace(" ,", ", ");
-
-            let file_name = format!("{author_str} - {} [{book_id}].fb2", book_data.name);
+            let author_str = normalized_author(book_data.author.as_deref());
+            let file_name = book_file_name(&author_str, &book_data.name, book_id);
             (file_name, book_data.name.clone(), author_str)
         },
     );
@@ -208,13 +203,8 @@ fn make_book_file_name(book_id: u32, book_map: &HashMap<u32, BookOutput>) -> Str
     book_map.get(&book_id).map_or_else(
         || format!("{book_id}.fb2"),
         |b| {
-            let author_str = b
-                .author
-                .as_deref()
-                .unwrap_or_default()
-                .trim()
-                .replace(" ,", ", ");
-            format!("{author_str} - {} [{book_id}].fb2", b.name)
+            let author_str = normalized_author(b.author.as_deref());
+            book_file_name(&author_str, &b.name, book_id)
         },
     )
 }

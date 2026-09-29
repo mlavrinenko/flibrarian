@@ -6,6 +6,7 @@ pub mod extracting;
 #[cfg(feature = "faking")]
 pub mod faking;
 pub mod indexing;
+mod naming;
 pub mod preflight;
 pub mod searching;
 pub mod settings;
