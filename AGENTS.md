@@ -27,3 +27,10 @@
 - All lints from workspace Cargo.toml must pass (clippy pedantic + nursery)
 - Use `anyhow` for application error handling
 - Prefer `thiserror` for library error types
+
+## Tasks
+
+- Tasks live in `truth/tasks/` under [MindTape](https://github.com/mlavrinenko/mindtape): load the `mindtape` skill and use `mt` for every task change. `mt ls @agent` lists open agent work.
+- File with `mt add -t feat` (or `fix`, `dev`, `docs`, `finding`, `tweak`). Every open task gives each goal in `truth/goals.typ` and `truth/process-goals.typ` a verdict.
+- Flip a task with the commit that carries its work (`mt wip <stem>` in the first, `mt done <stem>` in the last) and name it in a `Refs: <stem>` footer. The `commit-msg` hook (`.githooks/`, wired by `just install-hooks`) runs `mt check --commit-msg`.
+- `just check-tasks` validates the backlog and is part of `just check`.

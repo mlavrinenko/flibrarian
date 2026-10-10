@@ -214,6 +214,8 @@
               self.inputs.qahq.packages.${system}.linecop
             ];
             shellHook = ''
+              # Wire the tracked hooks (.githooks/) on every shell entry; quiet.
+              just install-hooks > /dev/null 2>&1
               export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH"
               export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="clang"
               export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS="-C link-arg=-fuse-ld=mold"

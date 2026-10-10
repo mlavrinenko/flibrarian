@@ -6,3 +6,4 @@ var
 node_modules
 frontend/dist
 *.profraw
+/.mindtape/cache/

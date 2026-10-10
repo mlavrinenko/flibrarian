@@ -65,9 +65,10 @@ check-frontend:
 
 # Run all checks in parallel — only shows output on failure
 check:
-    @parallel --will-cite --compress --halt now,fail=1 --jobs 2 ::: \
+    @parallel --will-cite --compress --halt now,fail=1 --jobs 3 ::: \
         "just cargo_features='{{ cargo_features }}' ci='{{ ci }}' check-rust" \
-        "just check-frontend"
+        "just check-frontend" \
+        "just check-tasks"
 
 # Regenerate all app icons (PNG, ICO, ICNS) from assets/icon.svg
 icons:
@@ -99,3 +100,14 @@ gui-build *ARGS:
 web-dev:
     cd frontend && bun run build
     cargo run --bin flibrarian-web -- --frontend-dir frontend/dist
+
+# Validate the task backlog (truth/tasks) against .mindtape/config.toml. Fix a
+# finding by repairing the task, never by loosening the config.
+check-tasks:
+    @mt check -q
+
+# Point git at the tracked hooks (.githooks/): commit-msg runs `mt check --commit-msg`
+install-hooks:
+    git config core.hooksPath .githooks
+    chmod +x .githooks/commit-msg
+    @echo "installed .githooks"

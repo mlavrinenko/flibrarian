@@ -68,3 +68,17 @@ git push github v0.2.0
 ```
 
 CI соберёт бинарники CLI, веб-сервера и GUI для всех платформ и создаст GitHub Release.
+
+## Задачи
+
+Бэклог лежит в `truth/tasks/`: один Typst-файл на задачу, ведётся в [MindTape](https://github.com/mlavrinenko/mindtape) (`mt`). `truth/goals.typ` говорит, зачем нужен flibrarian, и каждая открытая задача оценивает каждую цель.
+
+```bash
+mt ls                          # открытые задачи
+mt add -t feat                 # завести задачу (fix, dev, docs, finding, tweak)
+mt wip <stem>                  # взять в работу, вместе с первым коммитом
+mt done <stem>                 # закрыть, вместе с последним коммитом
+just check-tasks               # проверить бэклог (входит в just check)
+```
+
+В коммит с работой добавьте футер `Refs: <stem>`. Хук `commit-msg` (`just install-hooks`, в devshell ставится сам) запускает `mt check --commit-msg`.
