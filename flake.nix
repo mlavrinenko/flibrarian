@@ -210,6 +210,8 @@
               pkgs.just
               pkgs.worktrunk
               pkgs.parallel
+              # `chronic`: check-frontend prints only a failing linter's output.
+              pkgs.moreutils
               pkgs.valgrind
               self.inputs.qahq.packages.${system}.ejectest
               self.inputs.qahq.packages.${system}.linecop

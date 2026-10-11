@@ -58,10 +58,10 @@ check-rust:
 # Frontend checks: fmt, lint, svelte-check
 check-frontend:
     @parallel --will-cite --compress --halt now,fail=1 --jobs 3 ::: \
-        "cd frontend && bunx --silent prettier --check ." \
-        "cd frontend && bun --silent run lint" \
-        "cd frontend && bunx svelte-check --tsconfig ./tsconfig.app.json --fail-on-warnings" \
-        "linecop frontend"
+        "cd frontend && chronic bunx --silent prettier --check ." \
+        "cd frontend && chronic bun --silent run lint" \
+        "cd frontend && chronic bunx svelte-check --tsconfig ./tsconfig.app.json --fail-on-warnings" \
+        "chronic linecop frontend"
 
 # Run all checks in parallel — only shows output on failure
 check:
