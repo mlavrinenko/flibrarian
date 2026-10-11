@@ -15,7 +15,7 @@ fn open_with_schema(extension_dir: Option<&str>) -> Result<Connection> {
         AccessMode::ReadWrite,
         extension_dir,
     )?)?;
-    conn.execute_batch(include_str!("../src/schema.sql"))?;
+    conn.execute_batch(include_str!("../../src/schema.sql"))?;
     Ok(conn)
 }
 

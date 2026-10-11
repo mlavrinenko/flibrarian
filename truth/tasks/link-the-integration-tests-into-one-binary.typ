@@ -26,13 +26,13 @@
     ),
   ),
   assignee: "agent",
-  status: proposed(2026, 10, 11),
+  status: done(2026, 10, 11),
 )
 
 == Problem
 
 + Run `cargo test -p flibrarian-core --no-run`. Cargo links every dependency again for each file in `crates/flibrarian-core/tests/`, the only crate with a `tests/` directory.
-+ 🔴 It builds 22 integration executables of about 29 MB each (639 MB, measured 2026-10-11), and `extraction_test.rs` and `integration_test.rs` each compile their own copy of `tests/common/mod.rs`.
++ 🔴 It builds 22 integration executables of about 12 MB each (269 MB, measured 2026-10-11), and `extraction_test.rs` and `integration_test.rs` each compile their own copy of `tests/common/mod.rs`.
 + For scale: mindtape's 74 test files gave 263 executables averaging 298 MB in `target/debug/deps` (80 GB), and `just cover` doubled that (51 GB in one worktree; the disk filled). Here `just coverage` (tarpaulin) rebuilds the 22 too.
 
 

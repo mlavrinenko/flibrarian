@@ -3,9 +3,9 @@ use flibrarian_core::extracting::extract_books;
 use std::fs;
 use std::path::Path;
 
-mod common;
-
-use common::{add_author, create_test_zip, init_db, populate_db, populate_db_without_authors};
+use crate::common::{
+    add_author, create_test_zip, init_db, populate_db, populate_db_without_authors,
+};
 
 #[test]
 fn test_extract_books_from_zip() -> Result<()> {

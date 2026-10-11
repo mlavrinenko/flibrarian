@@ -6,7 +6,7 @@ limits:
   Svelte: 300
   CSS: 200
 overrides:
-  - pattern: "**/tests/*.rs"
+  - pattern: "**/tests/**/*.rs"
     limit: 400
   - pattern: "**/benches/*.rs"
     limit: 400

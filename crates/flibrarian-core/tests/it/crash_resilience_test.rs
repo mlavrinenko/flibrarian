@@ -48,7 +48,7 @@ fn create_test_zip(dir: &Path, zip_name: &str, books: &[(u32, &str, &str, &str)]
 fn init_db(db_path: &Path) -> Connection {
     let conn =
         Connection::open_with_flags(db_path, db_config(AccessMode::ReadWrite).unwrap()).unwrap();
-    conn.execute_batch(include_str!("../src/schema.sql"))
+    conn.execute_batch(include_str!("../../src/schema.sql"))
         .unwrap();
     conn
 }

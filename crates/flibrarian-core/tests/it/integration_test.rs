@@ -4,9 +4,7 @@ use flibrarian_core::common::db_config;
 use flibrarian_core::indexing::{self, IndexingMode, IndexingPhase, create_search_index};
 use flibrarian_core::searching::{SearchFilters, search_library};
 
-mod common;
-
-use common::{create_test_zip, init_db, populate_db};
+use crate::common::{create_test_zip, init_db, populate_db};
 
 #[test]
 fn test_index_library_indexes_books() {

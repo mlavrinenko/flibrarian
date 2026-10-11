@@ -56,7 +56,7 @@ cargo test                     # Все тесты
 cargo test test_name           # Один тест
 ```
 
-Тесты core-крейта лежат в `crates/flibrarian-core/tests/` и работают напрямую с парсером (без БД).
+Интеграционные тесты core-крейта лежат в `crates/flibrarian-core/tests/it/` и собираются в один бинарник `it` (`tests/it/main.rs`). Новый тест — это `tests/it/<name>.rs` плюс строка `mod <name>;` в `main.rs`. Общие помощники лежат в `tests/it/common` и подключаются как `crate::common`, фикстуры — в `tests/res/`.
 
 ## Релиз
 
