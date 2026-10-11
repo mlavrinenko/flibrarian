@@ -41,6 +41,20 @@ just check-frontend            # Только фронтенд
 
 Перед коммитом автоматически запускаются pre-commit хуки (clippy + rustfmt).
 
+## Worktrees
+
+Параллельная работа идёт в соседнем worktree. `just fork` создаёт его, `just land` вливает обратно; обе обёртки над [worktrunk](https://worktrunk.dev) (`wt`, из devshell) с флагами, которые нужны проекту: голый `wt merge` склеивает коммиты и теряет футеры `Refs:`.
+
+```bash
+just fork <slug>           # соседний worktree на новой ветке, .envrc разрешён, фронтенд собран
+just fork <slug> --base=@  # то же, но от текущего коммита, а не от main
+just land                  # в worktree: гейт, проверка wip, fast-forward, удаление
+```
+
+Worktree получает только коммиты, а не рабочую копию, поэтому сначала закоммитьте. Не делайте в нём `git stash`: список stash общий для всех worktree.
+
+Хуки лежат в [.config/wt.toml](.config/wt.toml), так что клону хватает nix и direnv. Новый worktree выполняет `direnv allow`, затем `scripts/prepare-frontend.sh` (`bun install --frozen-lockfile` и `bun run build` в `frontend/`): без `frontend/dist` не собирается `flibrarian-web`, без `frontend/node_modules` зависает `just check-frontend`. Перед fast-forward идут `just check` и `mt check --commits main..HEAD`; вторая отказывает ветке, чья задача осталась в `wip`.
+
 ## Стиль кода
 
 - Clippy pedantic + nursery, `unsafe` запрещён

@@ -34,3 +34,7 @@
 - File with `mt add -t feat` (or `fix`, `dev`, `docs`, `finding`, `tweak`). Every open task gives each goal in `truth/goals.typ` and `truth/process-goals.typ` a verdict.
 - Flip a task with the commit that carries its work (`mt wip <stem>` in the first, `mt done <stem>` in the last) and name it in a `Refs: <stem>` footer. The `commit-msg` hook (`.githooks/`, wired by `just install-hooks`) runs `mt check --commit-msg`.
 - `just check-tasks` validates the backlog and is part of `just check`.
+
+## Worktrees
+
+- Delegated work forks with `just fork <slug>` (a sibling worktree on a new branch, dev shell allowed, `frontend/node_modules` installed and `frontend/dist` built, so `just check` passes there with nothing set up by hand) and lands with `just land` run in that worktree: it gates, checks no named task is left `wip`, fast-forwards main and removes the worktree. Both wrap [worktrunk](https://worktrunk.dev); [.config/wt.toml](.config/wt.toml) holds the hooks. Never run a bare `wt merge`: it squashes away the `Refs:` footers.
