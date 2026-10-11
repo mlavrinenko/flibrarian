@@ -101,6 +101,21 @@ web-dev:
     cd frontend && bun run build
     cargo run --bin flibrarian-web -- --frontend-dir frontend/dist
 
+# Fork a sibling worktree on a new branch (`just fork <slug>`); extra flags go to
+# `wt switch`, e.g. `--base=@` to branch from HEAD, not main. The `pre-start`
+# hooks in .config/wt.toml allow the new worktree's `.envrc` and build its frontend.
+[positional-arguments]
+fork SLUG *ARGS:
+    wt switch --create --yes "$@"
+
+# Gate, fast-forward the branch onto main and remove its worktree; run it in the
+# worktree. `--no-squash --no-commit` keeps each commit's `Refs:` footer and
+# refuses a dirty tree instead of committing it; the `pre-merge` hooks in
+# .config/wt.toml run the gate and the wip check before the fast-forward.
+[positional-arguments]
+land *ARGS:
+    wt merge --no-squash --no-commit --yes "$@"
+
 # Validate the task backlog (truth/tasks) against .mindtape/config.toml. Fix a
 # finding by repairing the task, never by loosening the config.
 check-tasks:

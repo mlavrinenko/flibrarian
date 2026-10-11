@@ -208,6 +208,7 @@
               pkgs.librsvg
               pkgs.libsoup_3
               pkgs.just
+              pkgs.worktrunk
               pkgs.parallel
               pkgs.valgrind
               self.inputs.qahq.packages.${system}.ejectest
