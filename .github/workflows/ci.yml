@@ -46,10 +46,6 @@ jobs:
         with:
           name: mlavrinenko
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-          # The compiled dependency trees naersk and crane build, hundreds of
-          # MB each, would fill the shared free cache and evict the binaries
-          # consumers fetch.
-          pushFilter: "-deps-"
 
       - name: Flake check
         run: nix flake check --print-build-logs
