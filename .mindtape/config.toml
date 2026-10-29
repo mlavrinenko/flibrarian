@@ -1,7 +1,7 @@
 # .mindtape/config.toml — flibrarian's backlog, one Typst file per task.
 # Adapted from MindTape's own config; the rationale behind each rule lives in
 # https://github.com/mlavrinenko/mindtape/blob/main/.mindtape/config.toml.
-extends = ["mindtape-tasks"]
+extends = ["mindtape:tasks"]
 
 [tasks]
 
